@@ -31,23 +31,21 @@ class PayHandler(tornado.web.RequestHandler):
         xml = self.request.body
         d = order_response_xml_parse(xml)
         if d.get('return_code') == 'SUCCESS':
-            print(d)
+            self.write(conf.msg)
             openid = d['openid']
             otd    = d['out_trade_no']
             tid    = d['transaction_id']
             fee    = d['total_fee']
-            headers = {'Content-Type':'text/html'}
-            body = 'openid=%s&out_trade_no=%s&transaction_id=%&total_fee=%s'% (openid, otd, tid, fee)
+            body = 'openid=%s&out_trade_no=%s&transaction_id=%s&total_fee=%s'% (openid, otd, tid, fee)
             url = 'http://%s:%s/confirm_order' % (conf.dbserver_ip, conf.dbserver_port)
             http_client = tornado.httpclient.AsyncHTTPClient()
-            resp = tornado.gen.Task(
+            resp = yield tornado.gen.Task(
                         http_client.fetch,
                         url, 
                         method='POST',
-                        headers=headers,
+#                       headers=headers_,
                         body=body,
                         validate_cert=False)
-            self.write(conf.msg)
         self.finish()
 
 if __name__ == "__main__":
