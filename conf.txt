@@ -1,0 +1,10 @@
+[sys]
+ip=127.0.0.1
+port=5656
+
+[db]
+dbserver_ip=127.0.0.1
+dbserver_port=9000
+
+[ret]
+msg=<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>
